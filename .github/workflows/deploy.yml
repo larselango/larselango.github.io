@@ -1,0 +1,57 @@
+yaml# Bygger siden og publiserer den til GitHub Pages automatisk
+# hver gang du laster opp endringer (push) til main-grenen.
+# Du trenger ikke gjøre noe lokalt – GitHub gjør jobben.
+name: Bygg og publiser perks
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # lar deg også starte den manuelt fra Actions-fanen
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Kjør én om gangen; avbryt eldre kjøringer hvis en ny kommer
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hent koden
+        uses: actions/checkout@v4
+
+      - name: Sett opp Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installer avhengigheter
+        run: npm ci
+
+      - name: Bygg siden
+        run: npm run build
+
+      - name: Klargjør for Pages
+        uses: actions/configure-pages@v5
+
+      - name: Last opp ferdig side
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publiser til GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
