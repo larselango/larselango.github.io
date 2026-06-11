@@ -1,0 +1,79 @@
+# robots.txt for perks.no
+# ---------------------------------------------------------------------
+# Vanlige søkemotorer (Google, Bing m.fl.) er VELKOMNE og kan indeksere
+# hele siden. AI-roboter som samler innhold til trening ber vi om å holde
+# seg unna. NB: robots.txt er en høflig forespørsel – snille roboter
+# følger den, men tyver gjør det ikke. Den ekte beskyttelsen er Cloudflares
+# AI-blokkering (se VEILEDNING.md, del 9) som håndheves i nettverket.
+# ---------------------------------------------------------------------
+
+# Søkemotorer: full tilgang
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# --- AI-roboter vi ber holde seg unna ---
+User-agent: GPTBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+# Alle andre: tillatt (tom Disallow = full tilgang)
+User-agent: *
+Disallow:
+
+Sitemap: https://perks.no/sitemap.xml
