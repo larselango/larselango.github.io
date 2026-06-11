@@ -1,0 +1,11 @@
+# Avhengigheter – lastes ned ved bygg, skal IKKE opp på GitHub
+node_modules/
+
+# Ferdig bygget side – GitHub Actions lager denne, ikke last den opp
+dist/
+
+# Lokale logger og system-filer
+*.log
+.DS_Store
+.env
+.env.*
