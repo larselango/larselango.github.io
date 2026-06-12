@@ -430,7 +430,14 @@ export default function Perks() {
             {/* Nyhetsbrev – i det svarte verdikortet */}
             <div style={{ marginTop: 16, paddingTop: 15, borderTop: "1px solid rgba(255,255,255,0.15)" }}>
               {subscribed ? (
-                <div style={{ fontSize: 13.5, opacity: 0.92 }}>✓ Du er på lista – vi sier fra når det lønner seg.</div>
+                <div style={{ fontSize: 13.5, opacity: 0.92 }}> ✓ Du er på lista – vi sier fra når det lønner seg.
+                 <button
+                   onClick={() => { setSubscribed(false); setEmail(""); }}
+                   style={{ display: "block", marginTop: 8, padding: 0, border: "none", background: "none", color: accent, fontSize: 13, fontFamily: sans, cursor: "pointer", textDecoration: "underline" }}
+                 >
+                   Meld på en annen e-post
+                 </button>
+               </div>
               ) : (
                 <>
                   <div style={{ fontSize: 13.5, opacity: 0.85, marginBottom: 10, lineHeight: 1.4 }}>
