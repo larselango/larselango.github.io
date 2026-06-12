@@ -592,6 +592,9 @@ export default function Perks() {
           <p style={{ margin: "0 0 10px", color: ink, opacity: 0.62 }}>
             Vi bruker ingen sporings-cookies. Melder du deg på nyhetsbrevet, lagrer vi e-postadressen din – kun for å sende deg nyhetsbrevet, og du kan melde deg av når som helst.
           </p>
+          <p style={{ margin: "0 0 10px" }}>
+          <a href="/personvern.html" style={{ color: accent, textDecoration: "none" }}>Personvernerklæring</a>
+          </p>
           <p style={{ margin: "0 0 12px", color: ink, opacity: 0.5 }}>
             Rabatter og vilkår kan endres – sjekk alltid det som gjelder hos tilbyderen. Sist undersøkt juni 2026.
           </p>
