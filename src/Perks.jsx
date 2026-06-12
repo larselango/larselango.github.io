@@ -447,8 +447,18 @@ export default function Perks() {
                     Vil du vite når det lønner seg å bruke fordelene dine? Få tips når de er mest aktuelle – vi lover å ikke sende for mange e-poster.
                   </div>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="din@epost.no"
-                      style={{ flex: "1 1 150px", padding: "11px 13px", borderRadius: 9, border: "none", fontSize: 14.5, fontFamily: sans, background: "#fff", color: ink, outline: "none" }} />
+                    <div style={{ position: "relative", flex: "1 1 150px" }}>
+                      <input value={email} onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter") subscribe(); }}
+                        type="email" placeholder="din@epost.no"
+                        style={{ width: "100%", boxSizing: "border-box", padding: "11px 38px 11px 13px", borderRadius: 9, border: "none", fontSize: 14.5, fontFamily: sans, background: "#fff", color: ink, outline: "none" }} />
+                      {email && (
+                        <button type="button" onClick={() => setEmail("")} aria-label="Tøm feltet"
+                          style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", width: 24, height: 24, borderRadius: "50%", border: "none", background: "rgba(0,0,0,0.10)", color: ink, fontSize: 15, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
+                          ×
+                        </button>
+                      )}
+                    </div>
                     <button onClick={subscribe} className="btn-pink"
                       style={{ padding: "11px 18px", borderRadius: 9, border: "none", background: accent, color: "#fff", fontSize: 14.5, fontWeight: 600, fontFamily: sans, cursor: "pointer", whiteSpace: "nowrap" }}>
                       Meld meg på
@@ -465,13 +475,48 @@ export default function Perks() {
             </div>
             <div style={{ position: "relative" }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: accent, marginBottom: 8 }}>Din fordelsverdi</div>
-              <h1 style={{ fontSize: 24, fontFamily: serif, fontWeight: 600, lineHeight: 1.12, margin: 0, letterSpacing: -0.2, maxWidth: 430 }}>Finn fordelene du allerede har – og se hva de er verdt</h1>
+              <h1 style={{ fontSize: 24, fontFamily: serif, fontWeight: 600, lineHeight: 1.12, margin: 0, letterSpacing: -0.2, maxWidth: 430 }}>Finn fordelene du allerede har</h1>
               <p style={{ fontSize: 13.5, opacity: 0.7, margin: "9px 0 14px", maxWidth: 400, lineHeight: 1.45 }}>Velg medlemskapene dine, så anslår vi verdien og viser hvor du faktisk får rabatt.</p>
               <button onClick={() => { setDraft([]); setPicking(true); }} className="btn-pink"
                 style={{ border: `1.6px solid ${accent}`, background: "transparent", color: accent, borderRadius: 9, padding: "12px 20px", fontSize: 15, fontWeight: 700, fontFamily: sans, cursor: "pointer" }}>
                 Regn ut verdien min →
               </button>
-              <p style={{ fontSize: 11.5, opacity: 0.5, margin: "12px 0 0", maxWidth: 400, lineHeight: 1.4 }}>Rabatter og vilkår kan endres – vi tar forbehold om feil og utdaterte tilbud. Sjekk alltid hos leverandøren.</p>
+              <p style={{ fontSize: 11.5, opacity: 0.5, margin: "12px 0 0", maxWidth: 400, lineHeight: 1.4 }}>Rabatter og vilkår kan endres – vi tar forbehold om feil og utdaterte tilbud.</p>
+              {/* Nyhetsbrev – også i frontkortet */}
+              <div style={{ marginTop: 16, paddingTop: 15, borderTop: "1px solid rgba(0,0,0,0.10)" }}>
+                {subscribed ? (
+                  <div style={{ fontSize: 13.5, opacity: 0.85 }}> ✓ Du er på lista – vi sier fra når det lønner seg.
+                    <button onClick={() => { setSubscribed(false); setEmail(""); }}
+                      style={{ display: "block", marginTop: 8, padding: 0, border: "none", background: "none", color: accent, fontSize: 13, fontFamily: sans, cursor: "pointer", textDecoration: "underline" }}>
+                      Meld på en annen e-post
+                    </button>
+                     </div>
+                   ) : (
+                     <>
+                       <div style={{ fontSize: 13.5, opacity: 0.8, marginBottom: 10, lineHeight: 1.4 }}>
+                         Vil du vite når det lønner seg å bruke fordelene dine? Få tips når de er mest aktuelle – vi lover å ikke sende for mange e-poster.
+                       </div>
+                       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                         <div style={{ position: "relative", flex: "1 1 150px" }}>
+                           <input value={email} onChange={(e) => setEmail(e.target.value)}
+                             onKeyDown={(e) => { if (e.key === "Enter") subscribe(); }}
+                             type="email" placeholder="din@epost.no"
+                             style={{ width: "100%", boxSizing: "border-box", padding: "11px 38px 11px 13px", borderRadius: 9, border: "1px solid rgba(0,0,0,0.15)", fontSize: 14.5, fontFamily: sans, background: "#fff", color: ink, outline: "none" }} />
+                           {email && (
+                             <button type="button" onClick={() => setEmail("")} aria-label="Tøm feltet"
+                               style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", width: 24, height: 24, borderRadius: "50%", border: "none", background: "rgba(0,0,0,0.08)", color: ink, fontSize: 15, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
+                               ×
+                             </button>
+                           )}
+                         </div>
+                         <button onClick={subscribe} className="btn-pink"
+                           style={{ padding: "11px 18px", borderRadius: 9, border: "none", background: accent, color: "#fff", fontSize: 14.5, fontWeight: 600, fontFamily: sans, cursor: "pointer", whiteSpace: "nowrap" }}>
+                           Meld meg på
+                         </button>
+                       </div>
+                     </>
+                   )}
+                 </div>
             </div>
           </div>
         )}
