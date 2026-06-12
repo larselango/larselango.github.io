@@ -250,13 +250,16 @@ export default function Perks() {
     // Send til EmailOctopus hvis skjema-URL er satt i content.js (SITE.emailoctopusFormAction).
     // mode:"no-cors" -> vi kan ikke lese svaret, men påmeldingen registreres. Skru på
     // dobbel opt-in i EmailOctopus, så får brukeren en bekreftelses-e-post.
-    if (SITE.emailoctopusFormAction) {
-      try {
-        const body = new URLSearchParams();
-        body.append("field_0", e);
-        await fetch(SITE.emailoctopusFormAction, { method: "POST", mode: "no-cors", body });
-      } catch {}
-    }
+      if (SITE.emailoctopusFormAction) {
+       try {
+         const r = await fetch(SITE.emailoctopusFormAction, {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ email: e }),
+         });
+         if (!r.ok) console.error("Påmelding feilet:", await r.text());
+       } catch (err) { console.error(err); }
+     }
   };
 
   /* styling – farger/fonter kommer fra theme.js */
