@@ -15,7 +15,7 @@ export const SITE = {
   contactEmail: "hei@perks.no",
   // EmailOctopus: lim inn skjemaets action-URL mellom anførselstegnene.
   // Tom streng = påmelding lagres bare lokalt (siden virker, men sender ingenting).
-  emailoctopusFormAction: "https://perks-signup.DITTNAVN.workers.dev",
+  emailoctopusFormAction: "perks-nyhetsbrev.larselango.workers.dev",
 };
 
 
