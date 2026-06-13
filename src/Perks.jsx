@@ -153,6 +153,7 @@ export default function Perks() {
   const [pickQuery, setPickQuery] = useState("");
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState("alle");
+  const [expandedCats, setExpandedCats] = useState([]); // kategorier utvidet i «Alle»-visningen
   const fontInjected = useRef(false);
   const guidesRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -585,21 +586,24 @@ export default function Perks() {
             Ingen treff{query ? ` på «${query}»` : ""}{activeCat !== "alle" ? " i denne kategorien" : ""}.
           </div>
         ) : showGrouped ? (
-          grouped.map(({ cat, rows }) => (
+          grouped.map(({ cat, rows }) => {
+            const open = expandedCats.includes(cat.id);
+            return (
             <section key={cat.id} style={{ marginBottom: 20 }}>
               <h2 style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 18, fontFamily: serif, letterSpacing: -0.2, color: ink, margin: "22px 0 11px", fontWeight: 600 }}>
                 {CAT_ICON[cat.id] && React.createElement(CAT_ICON[cat.id], { size: 18, strokeWidth: 2, color: accent })}
                 {cat.label}
               </h2>
-              {rows.slice(0, 4).map((r, i) => <Row key={cat.id + i} m={r.m} b={r.b} />)}
+              {(open ? rows : rows.slice(0, 4)).map((r, i) => <Row key={cat.id + i} m={r.m} b={r.b} />)}
               {rows.length > 4 && (
-                <button onClick={() => setActiveCat(cat.id)}
+                <button onClick={() => setExpandedCats((e) => e.includes(cat.id) ? e.filter((x) => x !== cat.id) : [...e, cat.id])}
                   style={{ border: "none", background: "none", color: ink, opacity: 0.5, fontWeight: 600, fontSize: 12.5, cursor: "pointer", fontFamily: sans, padding: "9px 2px 2px" }}>
-                  Vis alle {rows.length} →
+                  {open ? "Vis færre ↑" : `Vis alle ${rows.length} →`}
                 </button>
               )}
             </section>
-          ))
+            );
+          })
         ) : (
           <>
             <div style={{ fontSize: 13, opacity: 0.55, marginBottom: 4 }}>{flat.length} {flat.length === 1 ? "treff" : "treff"}</div>
