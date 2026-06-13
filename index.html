@@ -60,6 +60,7 @@
   <body>
     <!-- React monteres her. Innholdet under vises for søkemotorer og hvis
          JavaScript er av; det byttes ut med appen så snart den laster. -->
+    <div id="site-header"></div>
     <div id="root">
       <!-- Rolig lasteskjerm i samme farge som appen, så overgangen blir sømløs. -->
       <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f4f4f6;color:#0d0c22;font-family:system-ui,sans-serif">
@@ -81,5 +82,6 @@
       </noscript>
     </div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="/header.js" defer></script>
   </body>
 </html>
