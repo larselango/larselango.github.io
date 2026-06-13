@@ -153,7 +153,6 @@ export default function Perks() {
   const [pickQuery, setPickQuery] = useState("");
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState("alle");
-  const [menuOpen, setMenuOpen] = useState(false);
   const fontInjected = useRef(false);
   const guidesRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -266,6 +265,30 @@ export default function Perks() {
   const serif = fonts.serif, sans = fonts.sans;
   const wrap = { maxWidth: 600, margin: "0 auto", padding: "0 16px" };
 
+  // Lar den felles headeren (public/header.js) styre forsidens navigasjon
+  useEffect(() => {
+    const onNav = (e) => {
+      const target = e.detail && e.detail.target;
+      setPicking(false);
+      setTimeout(() => {
+        if (target === "guider") {
+          const el = document.getElementById("guider");
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 80);
+    };
+    window.addEventListener("perks:nav", onNav);
+    if (window.location.hash === "#guider") {
+      setTimeout(() => {
+        const el = document.getElementById("guider");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 200);
+    }
+    return () => window.removeEventListener("perks:nav", onNav);
+  }, []);
+
   if (selected === null)
     return <div style={{ minHeight: "100vh", background: paper, fontFamily: sans, display: "flex", alignItems: "center", justifyContent: "center", color: ink }}>Laster…</div>;
 
@@ -364,31 +387,7 @@ export default function Perks() {
 
   return (
     <div style={{ minHeight: "100vh", background: paper, color: ink, fontFamily: sans, padding: "0 0 70px" }}>
-      {/* Logofelt – egen header adskilt fra tabellen */}
-      <header style={{ position: "sticky", top: 0, zIndex: 30, background: surface, borderBottom: "1px solid rgba(0,0,0,0.12)" }}>
-        <div style={{ ...wrap, display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 13, paddingBottom: 13 }}>
-          <div onClick={() => { setPicking(false); setMenuOpen(false); if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ cursor: "pointer" }}>
-            <div style={{ fontFamily: fonts.logo, fontSize: 30, fontWeight: 400, letterSpacing: 0, lineHeight: 1.1, color: ink }}>perks<span style={{ color: accent }}>.</span></div>
-          </div>
-          <button onClick={() => setMenuOpen((o) => !o)} aria-label="Meny"
-            style={{ border: "none", background: "none", cursor: "pointer", padding: 8, marginRight: -8, display: "flex", flexDirection: "column", gap: 5 }}>
-            {[0, 1, 2].map((i) => <span key={i} style={{ display: "block", width: 23, height: 2, background: ink, borderRadius: 2 }} />)}
-          </button>
-        </div>
-        {menuOpen && (
-          <nav style={{ borderTop: "1px solid rgba(0,0,0,0.08)", background: surface }}>
-            <div style={{ ...wrap, paddingTop: 4, paddingBottom: 10 }}>
-              {MENU.map((item, i) => (
-                <button key={i} onClick={() => { setMenuOpen(false); if (item.scroll && guidesRef.current) guidesRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-                  style={{ width: "100%", textAlign: "left", border: "none", background: "none", cursor: "pointer", fontFamily: sans, fontSize: 15.5, fontWeight: 500, color: ink, padding: "13px 2px", borderBottom: i < MENU.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  {item.label}
-                  {item.soon && <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: 0.5, textTransform: "uppercase", opacity: 0.4 }}>Snart</span>}
-                </button>
-              ))}
-            </div>
-          </nav>
-        )}
-      </header>
+      {/* Header (logo + meny) ligger nå i public/header.js – felles for hele nettstedet */}
 
       <div style={{ ...wrap, paddingTop: 18 }}>
 
@@ -610,7 +609,7 @@ export default function Perks() {
         )}
 
         {/* Diskré inngang til kommende innhold – konkurrerer aldri med søket */}
-        <section ref={guidesRef} style={{ marginTop: 34, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.10)" }}>
+        <section ref={guidesRef} id="guider" style={{ marginTop: 34, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.10)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
             <h2 style={{ fontFamily: serif, fontSize: 17, fontWeight: 600, margin: 0 }}>Guider</h2>
             <span style={{ fontSize: 12, opacity: 0.45 }}>kommer snart</span>
