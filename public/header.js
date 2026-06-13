@@ -40,7 +40,7 @@
     style.textContent =
       "#site-header{position:sticky;top:0;z-index:30}" +
       ".ph-bar{background:" + SURFACE + ";border-bottom:1px solid rgba(0,0,0,0.12)}" +
-      ".ph-inner{max-width:600px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between}" +
+      ".ph-inner{box-sizing:content-box;max-width:600px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between}" +
       ".ph-logo{font-family:'Kaushan Script',cursive;font-size:30px;font-weight:400;line-height:1.1;color:" + INK + ";text-decoration:none}" +
       ".ph-logo span{color:" + ACCENT + "}" +
       ".ph-burger{border:none;background:none;cursor:pointer;padding:8px;margin-right:-8px;display:flex;flex-direction:column;gap:5px}" +

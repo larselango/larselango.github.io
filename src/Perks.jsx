@@ -157,7 +157,6 @@ export default function Perks() {
   const guidesRef = useRef(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
-  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     if (fontInjected.current) return;
@@ -386,7 +385,7 @@ export default function Perks() {
   });
 
   return (
-    <div style={{ minHeight: "100vh", background: paper, color: ink, fontFamily: sans, padding: "0 0 70px" }}>
+    <div style={{ minHeight: "100vh", background: paper, color: ink, fontFamily: sans, padding: "0 0 34px" }}>
       {/* Header (logo + meny) ligger nå i public/header.js – felles for hele nettstedet */}
 
       <div style={{ ...wrap, paddingTop: 18 }}>
@@ -627,36 +626,7 @@ export default function Perks() {
             ))}
           </div>
         </section>
-
-        <footer style={{ marginTop: 34, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.10)", fontSize: 12.5, lineHeight: 1.65 }}>
-          {/* Kontakt / meld feil – oppfordrer til tips og rettelser */}
-          <div style={{ background: surface, border: "1px solid rgba(0,0,0,0.09)", borderRadius: 13, padding: "16px", marginBottom: 18 }}>
-            <div style={{ fontFamily: serif, fontSize: 16, fontWeight: 600, color: ink }}>Fant du en feil, eller har du et tips?</div>
-            <p style={{ margin: "5px 0 11px", color: ink, opacity: 0.72, lineHeight: 1.5 }}>
-              Vi jobber stadig med å holde oversikten oppdatert. Ser du likevel noe som er utdatert, feil, eller en fordel som mangler, setter vi stor pris på et hint.
-            </p>
-            <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} rows={3} placeholder="Skriv her – f.eks. «Rabatten hos … ser ut til å ha endret seg»"
-              style={{ width: "100%", boxSizing: "border-box", padding: "11px 12px", fontSize: 14, fontFamily: sans, border: "1.5px solid rgba(0,0,0,0.18)", borderRadius: 9, background: "#fff", color: ink, outline: "none", resize: "vertical", lineHeight: 1.45 }} />
-            <button
-              onClick={() => { const t = feedback.trim(); if (!t) return; window.location.href = `mailto:${SITE.contactEmail}?subject=${encodeURIComponent("Tips/feil – perks.no")}&body=${encodeURIComponent(t)}`; }}
-              style={{ marginTop: 12, border: "none", background: accent, color: "#fff", borderRadius: 10, padding: "12px 24px", fontSize: 15, fontWeight: 700, fontFamily: sans, cursor: "pointer" }} className="btn-solid">
-              Send inn
-            </button>
-          </div>
-          <p style={{ margin: "0 0 10px", color: ink, opacity: 0.62 }}>
-            <strong style={{ opacity: 0.85 }}>perks</strong> er en uavhengig oversikt over medlemsfordeler i Norge.
-          </p>
-          <p style={{ margin: "0 0 10px", color: ink, opacity: 0.62 }}>
-            Vi bruker ingen sporings-cookies. Melder du deg på nyhetsbrevet, lagrer vi e-postadressen din – kun for å sende deg nyhetsbrevet, og du kan melde deg av når som helst.
-          </p>
-          <p style={{ margin: "0 0 10px" }}>
-          <a href="/personvern.html" style={{ color: accent, textDecoration: "none" }}>Personvernerklæring</a>
-          </p>
-          <p style={{ margin: "0 0 12px", color: ink, opacity: 0.5 }}>
-            Rabatter og vilkår kan endres – sjekk alltid det som gjelder hos tilbyderen. Sist undersøkt juni 2026.
-          </p>
-          <span style={{ fontSize: 11, color: ink, opacity: 0.45 }}>{SITE.build}</span>
-        </footer>
+        {/* Footer (skjema + info) ligger nå i public/footer.js – felles for hele nettstedet */}
       </div>
     </div>
   );
