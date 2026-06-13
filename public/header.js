@@ -25,13 +25,9 @@
     { label: "Medlemsorganisasjoner", soon: true },
   ];
 
-  /* ---------- Logo-fonten (Kaushan Script) ---------- */
-  if (!document.querySelector('link[href*="Kaushan+Script"]')) {
-    var fontLink = document.createElement("link");
-    fontLink.rel = "stylesheet";
-    fontLink.href = "https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap";
-    document.head.appendChild(fontLink);
-  }
+  /* ---------- Logo-fonten ----------
+     Logoen «perks.» bruker system-fonten (bold, tett tracking) – samme uttrykk
+     som lasteskjermen i index.html, så overgangen ved innlasting blir sømløs. */
 
   /* ---------- Stil ---------- */
   if (!document.getElementById("ph-styles")) {
@@ -41,7 +37,7 @@
       "#site-header{position:sticky;top:0;z-index:30}" +
       ".ph-bar{background:" + SURFACE + ";border-bottom:1px solid rgba(0,0,0,0.12)}" +
       ".ph-inner{box-sizing:content-box;max-width:720px;margin:0 auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between}" +
-      ".ph-logo{font-family:'Kaushan Script',cursive;font-size:30px;font-weight:400;line-height:1.1;color:" + INK + ";text-decoration:none}" +
+      ".ph-logo{font-family:system-ui,sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.5px;line-height:1.1;color:" + INK + ";text-decoration:none}" +
       ".ph-logo span{color:" + ACCENT + "}" +
       ".ph-burger{border:none;background:none;cursor:pointer;padding:8px;margin-right:-8px;display:flex;flex-direction:column;gap:5px}" +
       ".ph-burger span{display:block;width:23px;height:2px;background:" + INK + ";border-radius:2px}" +
