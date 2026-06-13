@@ -56,6 +56,12 @@
         "description": "Uavhengig oversikt over norske medlemsfordeler. Velg medlemskapene dine og se hvilke fordeler du har."
       }
     </script>
+
+    <!-- Lys grå bakgrunn helt ut til kantene (samme som undersidene) -->
+    <style>
+      html { background: #f4f4f6; }
+      body { margin: 0; background: #f4f4f6; }
+    </style>
   </head>
   <body>
     <!-- React monteres her. Innholdet under vises for søkemotorer og hvis
@@ -81,7 +87,9 @@
         </div>
       </noscript>
     </div>
+    <div id="site-footer"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script src="/header.js" defer></script>
+    <script src="/footer.js" defer></script>
   </body>
 </html>

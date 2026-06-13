@@ -10,7 +10,6 @@
 /* SITE: globale innstillinger. Bytt e-post og lim inn EmailOctopus-skjemaets
    action-URL her når du har opprettet lista (se VEILEDNING.md, del 6). */
 export const SITE = {
-  build: "v77 · oppdatert " + "2026",
   // E-postadressen «Send inn»-knappen og fotnoten bruker:
   contactEmail: "hei@perks.no",
   // EmailOctopus: lim inn skjemaets action-URL mellom anførselstegnene.
