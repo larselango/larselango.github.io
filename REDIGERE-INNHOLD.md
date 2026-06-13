@@ -149,7 +149,7 @@ Også i `src/theme.js`. To steg, ellers lastes ikke fonten:
 1. Endre navnet i `fonts`:
    ```js
    export const fonts = {
-     logo: "'Kaushan Script', cursive",
+     logo: "system-ui, sans-serif",
      serif: "'Schibsted Grotesk', system-ui, sans-serif",
      sans: "'Hanken Grotesk', system-ui, sans-serif",
    };

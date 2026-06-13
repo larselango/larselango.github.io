@@ -21,7 +21,7 @@ export const green = "#1f8a5b";   // positive markører
    Vil du bytte font: endre navnet HER og i googleFontsUrl under, slik at
    den nye fonten faktisk lastes. Navnene må matche Google Fonts nøyaktig. */
 export const fonts = {
-  logo: "'Kaushan Script', cursive",
+  logo: "system-ui, sans-serif",
   serif: "'Schibsted Grotesk', system-ui, sans-serif",
   sans: "'Hanken Grotesk', system-ui, sans-serif",
 };
@@ -29,4 +29,4 @@ export const fonts = {
 /* Lenka som henter fontene fra Google Fonts. Bytter du font over, bytt
    tilsvarende familienavn her (mellomrom skrives som +). */
 export const googleFontsUrl =
-  "https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap";
+  "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap";

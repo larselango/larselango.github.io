@@ -340,7 +340,7 @@ export default function Perks() {
           </div>
           )}
         </div>
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "linear-gradient(transparent, " + paper + " 32%)", padding: "26px 16px 18px" }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50, background: "linear-gradient(transparent, " + paper + " 32%)", padding: "26px 16px 18px" }}>
           <div style={wrap}>
             <button onClick={() => saveSelection(draft)} className="btn-pink"
               style={{ width: "100%", background: accent, color: "#fff", border: "none", borderRadius: 10, padding: "16px", fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: sans }}>
@@ -398,7 +398,7 @@ export default function Perks() {
       </div>
       <div style={{ position: "relative" }}>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: accent, marginBottom: 6 }}>Nyhetsbrev</div>
-        <h3 style={{ fontFamily: serif, fontSize: 19, fontWeight: 600, lineHeight: 1.15, letterSpacing: -0.2, margin: "0 0 8px", color: ink }}>Gå aldri glipp av en god avtale</h3>
+        <h3 style={{ fontFamily: serif, fontSize: 19, fontWeight: 600, lineHeight: 1.15, letterSpacing: -0.2, margin: "0 0 8px", color: ink }}>Gå aldri glipp av en god deal</h3>
         {subscribed ? (
           <div style={{ fontSize: 13.5, opacity: 0.85 }}> ✓ Du er på lista – vi sier fra når det lønner seg.
             <button onClick={() => { setSubscribed(false); setEmail(""); }}
