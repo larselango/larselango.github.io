@@ -392,12 +392,13 @@ export default function Perks() {
      Følger verdikortets lyse design: hvit bakgrunn med rosa venstrekant. Alltid synlig,
      uavhengig av valgte medlemskap. */
   const renderNewsletter = () => (
-    <section style={{ borderRadius: 16, padding: "20px", margin: "20px 0", background: surface, border: "1px solid rgba(0,0,0,0.09)", borderLeft: `4px solid ${accent}`, position: "relative", overflow: "hidden" }}>
+    <section style={{ borderRadius: 16, padding: "22px 20px", margin: "20px 0", background: tint(accent, 0.08), border: `1px solid ${tint(accent, 0.28)}`, borderLeft: `4px solid ${accent}`, position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{ position: "absolute", right: -24, top: -16, transform: "rotate(-12deg)", opacity: 0.06, color: accent, pointerEvents: "none" }}>
         {React.createElement(Tag, { size: 150, strokeWidth: 1.4 })}
       </div>
       <div style={{ position: "relative" }}>
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: accent, marginBottom: 8 }}>Nyhetsbrev</div>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: accent, marginBottom: 6 }}>Nyhetsbrev</div>
+        <h3 style={{ fontFamily: serif, fontSize: 19, fontWeight: 600, lineHeight: 1.15, letterSpacing: -0.2, margin: "0 0 8px", color: ink }}>Gå aldri glipp av en god avtale</h3>
         {subscribed ? (
           <div style={{ fontSize: 13.5, opacity: 0.85 }}> ✓ Du er på lista – vi sier fra når det lønner seg.
             <button onClick={() => { setSubscribed(false); setEmail(""); }}
