@@ -35,6 +35,15 @@ const scoreOf = (note) => {
   return nums.length ? Math.max(...nums) : 0;
 };
 
+/* Tidsbegrensede tilbud: et tilbud med «until» skjules automatisk når datoen
+   har passert (se prioritering-og-loft.md). Standard er ingen utløp. */
+const TODAY = new Date().toISOString().slice(0, 10);
+const isLive = (b) => !b.until || b.until >= TODAY;
+
+/* niche = hyperlokale/smale fordeler. De vises fortsatt, men vektes nederst i
+   sorteringen så de ikke fortrenger de brede (se prioritering-og-loft.md). */
+const nicheRank = (b) => (b && b.niche ? 1 : 0);
+
 /* Kjente forbruker­merker som løftes først i lista (kuratert, grov to-tier).
    Delstrenger, små bokstaver – matchet mot merchant-navn. Bare merker som faktisk
    finnes i katalogen er med; utvid lista når nye stormerker legges til. */
@@ -46,7 +55,7 @@ const popRank = (merchant) => {
 };
 /* Sorteringsnøkkel: kjente merker først, deretter høyest rabatt */
 
-const byComposite = (a, z) => a.pop - z.pop || z.score - a.score;
+const byComposite = (a, z) => a.niche - z.niche || a.pop - z.pop || z.score - a.score;
 
 /* Aktør-nøkkel: kjente kjeder kollapses til sitt POPULAR-nøkkelord (så «Esso» og
    «Esso Mastercard» teller som samme aktør); ukjente bruker fullt, normalisert navn. */
@@ -128,10 +137,11 @@ const estimateValue = (memberships) => {
   const autoItems = [];
   let offerCount = 0;
   for (const m of memberships) {
-    offerCount += m.benefits.length;
+    const live = m.benefits.filter(isLive);
+    offerCount += live.length;
     const rules = AUTO_VALUE[m.id];
     if (!rules) continue;
-    for (const b of m.benefits) {
+    for (const b of live) {
       for (const r of rules) {
         if (r.re.test((b.merchant || "").toLowerCase())) {
           auto += r.value;
@@ -213,9 +223,10 @@ export default function Perks() {
     const rows = [];
     for (const m of selMemberships)
       for (const b of m.benefits) {
+        if (!isLive(b)) continue;
         if (activeCat !== "alle" && !b.cats.includes(activeCat)) continue;
         if (q && !haystackOf(b).includes(q)) continue;
-        rows.push({ m, b, score: scoreOf(b.note), pop: popRank(b.merchant) });
+        rows.push({ m, b, score: scoreOf(b.note), pop: popRank(b.merchant), niche: nicheRank(b) });
       }
     rows.sort(byComposite);
     return rows;
@@ -223,14 +234,14 @@ export default function Perks() {
 
   const presentCats = useMemo(() => {
     const set = new Set();
-    selMemberships.forEach((m) => m.benefits.forEach((b) => b.cats.forEach((c) => set.add(c))));
+    selMemberships.forEach((m) => m.benefits.forEach((b) => { if (isLive(b)) b.cats.forEach((c) => set.add(c)); }));
     return CATEGORIES.filter((c) => set.has(c.id));
   }, [selMemberships]);
 
   const grouped = useMemo(() => {
     return presentCats.map((c) => {
       const rows = [];
-      selMemberships.forEach((m) => m.benefits.forEach((b) => { if (b.cats.includes(c.id)) rows.push({ m, b, score: scoreOf(b.note), pop: popRank(b.merchant) }); }));
+      selMemberships.forEach((m) => m.benefits.forEach((b) => { if (isLive(b) && b.cats.includes(c.id)) rows.push({ m, b, score: scoreOf(b.note), pop: popRank(b.merchant), niche: nicheRank(b) }); }));
       return { cat: c, rows: diversify(rows) };
     }).filter((g) => g.rows.length);
   }, [selMemberships, presentCats]);
@@ -304,7 +315,7 @@ export default function Perks() {
                     <span style={{ fontFamily: serif, fontSize: 16, fontWeight: 600, lineHeight: 1.12, wordBreak: "break-word" }}>{m.short}</span>
                   </div>
                   <div style={{ fontSize: 11.5, opacity: 0.6, marginTop: 8, lineHeight: 1.3 }}>
-                    {m.sub ? m.sub + " · " : ""}{m.benefits.length} fordeler{m.cost ? ` · ${m.cost} kr/år` : ""}
+                    {m.sub ? m.sub + " · " : ""}{m.benefits.filter(isLive).length} fordeler{m.cost ? ` · ${m.cost} kr/år` : ""}
                     {m.parent ? <span style={{ display: "block", marginTop: 2, fontStyle: "italic", opacity: 0.85 }}>+ {(CATALOG.find((x) => x.id === m.parent) || {}).short}-fordeler følger med</span> : null}
                   </div>
                 </button>
@@ -347,6 +358,11 @@ export default function Perks() {
           </span>
         </div>
         {b.note && <div style={{ fontSize: 13.5, opacity: 0.74, marginTop: 4, lineHeight: 1.4 }}>{b.note}</div>}
+        {b.notUnique && (
+          <span style={{ display: "inline-block", marginTop: 6, fontSize: 11, fontWeight: 600, color: ink, opacity: 0.5, border: "1px solid rgba(0,0,0,0.16)", borderRadius: 20, padding: "2px 8px" }}>
+            fås også andre steder
+          </span>
+        )}
         {badge && b.cats.length > 1 && (
           <div style={{ fontSize: 11.5, opacity: 0.45, marginTop: 6 }}>{b.cats.map((c) => CAT_LABEL[c]).join(" · ")}</div>
         )}

@@ -53,7 +53,12 @@ const valueFor = (merchant) => {
   return null;
 };
 
+const TODAY = new Date().toISOString().slice(0, 10);
+const isLive = (b) => !b.until || b.until >= TODAY; // skjul utløpte tidsbegrensede tilbud
+const nicheRank = (b) => (b && b.niche ? 1 : 0);    // smale fordeler nederst
+
 const items = lo.benefits
+  .filter(isLive)
   .map((b) => {
     const cats = b.cats && b.cats.length ? b.cats : ["andre"];
     const v = valueFor(b.merchant);
@@ -66,12 +71,15 @@ const items = lo.benefits
       iconSvg: iconSvgFor(b),
       _pop: popRank(b.merchant),
       _score: scoreOf(b.note),
+      _niche: nicheRank(b),
     };
     if (v != null) row.value = v;
+    if (b.niche) row.niche = true;
+    if (b.notUnique) row.notUnique = true;
     return row;
   })
-  .sort((a, z) => a._pop - z._pop || z._score - a._score)
-  .map(({ _pop, _score, ...rest }) => rest);
+  .sort((a, z) => a._niche - z._niche || a._pop - z._pop || z._score - a._score)
+  .map(({ _pop, _score, _niche, ...rest }) => rest);
 
 /* Etiketter for kategorifiltrene (kun de kategoriene som faktisk finnes). */
 const catLabels = {};

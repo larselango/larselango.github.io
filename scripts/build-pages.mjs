@@ -33,6 +33,8 @@ const scoreOf = (note) => {
   return n.length ? Math.max(...n) : 0;
 };
 const popRank = (m) => (m && POPULAR.some((k) => m.toLowerCase().includes(k)) ? 0 : 1);
+const isLive = (b) => !b.until || b.until >= TODAY; // skjul tidsbegrensede tilbud som er utløpt
+const nicheRank = (b) => (b && b.niche ? 1 : 0);    // hyperlokale/smale fordeler vektes nederst
 const valueFor = (orgId, merchant) => {
   for (const r of (AUTO_VALUE[orgId] || [])) if (r.re.test((merchant || "").toLowerCase())) return r.value;
   return null;
@@ -53,12 +55,15 @@ function cardHtml(org, b) {
   const value = valueFor(org.id, b.merchant);
   const valueHtml = value != null
     ? `<span class="card-value">≈ ${value.toLocaleString("no-NO")} kr/år inkludert</span>` : "";
+  const notUniqueHtml = b.notUnique
+    ? `<span class="card-notunique">fås også andre steder</span>` : "";
   return `<a class="card" href="${esc(url)}" target="_blank" rel="nofollow noopener">`
     + `<span class="card-ic" aria-hidden="true" style="background:${tint(org.color, 0.15)};color:rgba(13,12,34,0.62)">${svgOf(iconOf(b), 20)}</span>`
     + `<div class="card-body">`
       + `<div class="card-top"><span class="card-merch">${esc(b.merchant)}</span><span class="card-cat">${esc(CAT_LABEL[b.cats[0]] || "Andre tilbud")}</span></div>`
       + `<div class="card-note">${esc(b.note || "")}</div>`
       + valueHtml
+      + notUniqueHtml
     + `</div></a>`;
 }
 
@@ -67,13 +72,14 @@ function buildPage(org) {
   const seo = PAGE_SEO[org.id] || {};
   const slug = seo.slug || `${slugify(org.short || org.name)}-medlemsfordeler`;
   const url = `${SITE}/${slug}.html`;
-  const count = org.benefits.length;
+  const liveBenefits = org.benefits.filter(isLive);
+  const count = liveBenefits.length;
 
   // grupper per kategori i CATEGORIES-rekkefølge; sorter innad som forsiden
   const groups = CATEGORIES.map((c) => ({
     cat: c,
-    rows: org.benefits.filter((b) => (b.cats || []).includes(c.id))
-      .sort((a, z) => popRank(a.merchant) - popRank(z.merchant) || scoreOf(z.note) - scoreOf(a.note)),
+    rows: liveBenefits.filter((b) => (b.cats || []).includes(c.id))
+      .sort((a, z) => nicheRank(a) - nicheRank(z) || popRank(a.merchant) - popRank(z.merchant) || scoreOf(z.note) - scoreOf(a.note)),
   })).filter((g) => g.rows.length);
 
   const topCats = groups.slice(0, 3).map((g) => g.cat.label.toLowerCase()).join(", ");
