@@ -38,6 +38,9 @@ Feltene betyr:
 | `cats`     | Én eller flere kategorier (se liste under)         | Ja       |
 | `kw`       | Søkeord så folk finner tilbudet (valgfritt)       | Nei      |
 | `url`      | Egen lenke for *dette* tilbudet (valgfritt)       | Nei      |
+| `niche`    | `true` = hyperlokal/smal fordel. Vises fortsatt, men sorteres nederst så den ikke fortrenger de brede | Nei |
+| `until`    | Sluttdato `"ÅÅÅÅ-MM-DD"` for tidsbegrensede tilbud. Skjules automatisk når datoen har passert | Nei |
+| `notUnique`| `true` = fordelen fås også andre steder (f.eks. via LogBuy, arbeidsgiver eller privat abonnement). Viser merket «fås også andre steder» | Nei |
 
 **Slik gjør du det:**
 1. Finn organisasjonen i `CATALOG` (søk f.eks. etter `id: "lo"`).
