@@ -30,34 +30,9 @@ h2 { font-family: var(--serif); font-weight: 700; letter-spacing: -.3px; font-si
 p { margin: 0 0 16px; }
 strong { font-weight: 600; }
 
-.lead { font-size: 18px; line-height: 1.5; margin: 0 0 12px; opacity: .92; }
-.intro-body { font-size: 15.5px; line-height: 1.6; margin: 0 0 16px; opacity: .82; }
-.meta { font-size: 13.5px; opacity: .6; margin: 0 0 18px; }
+.lead { font-size: 18px; line-height: 1.5; margin: 0 0 18px; opacity: .9; }
+.meta { font-size: 13.5px; opacity: .6; margin: 0 0 20px; }
 .related { display: inline-block; font-weight: 600; text-decoration: none; margin: 0 0 24px; }
-
-/* Artikkelinnganger – kompakte kort (matcher resten av nettstedet, tar lite plass) */
-.art-list { display: grid; gap: 10px; margin: 0 0 22px; }
-.art {
-  display: flex; align-items: center; gap: 13px; text-decoration: none; color: inherit;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 11px 14px;
-  transition: border-color .13s ease, transform .13s ease, box-shadow .13s ease;
-}
-.art:hover { border-color: rgba(215,110,152,.42); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(13,12,34,.10); }
-.art-ic { width: 44px; height: 44px; border-radius: 12px; flex: none; display: flex; align-items: center; justify-content: center; }
-.art-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.art-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); }
-.art-title { font-family: var(--serif); font-weight: 600; font-size: 16px; line-height: 1.2; color: var(--ink); }
-.art-go { flex: none; font-size: 12.5px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-
-/* Søk i fordelene – festet under headeren, samme uttrykk som forsidens søk */
-.search-wrap { position: sticky; top: var(--ph-h, 60px); z-index: 5; background: var(--paper); padding: 10px 0 8px; margin: 0 0 4px; }
-#perks-search {
-  width: 100%; box-sizing: border-box; padding: 13px 15px; font-size: 16px; font-family: var(--sans);
-  border: 1.5px solid var(--ink); border-radius: 10px; background: var(--surface); color: var(--ink); outline: none;
-}
-#perks-search::placeholder { color: rgba(13,12,34,.45); }
-.search-empty { font-size: 15.5px; opacity: .65; margin: 8px 2px 22px; }
-.cat-count { font-family: var(--sans); font-weight: 600; font-size: 13px; opacity: .4; }
 
 /* Kategori-ikon i H2 (samme uttrykk som forsidens seksjoner) */
 .cat-ic { display: inline-flex; color: var(--accent); }
