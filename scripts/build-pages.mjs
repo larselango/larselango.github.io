@@ -13,7 +13,7 @@
    Stil: public/pages.css. Header/footer/nyhetsbrev: de delte /*.js-filene.
    ===================================================================== */
 import { CATEGORIES, CAT_LABEL, CATALOG, POPULAR, AUTO_VALUE } from "../src/content.js";
-import { iconOf, CAT_ICON } from "../src/icons.js";
+import { iconOf, CAT_ICON, iconByName } from "../src/icons.js";
 import { PAGE_SEO } from "../src/seo-pages.js";
 import { FAQ } from "../src/faq.js";
 import { createElement } from "react";
@@ -35,6 +35,24 @@ const scoreOf = (note) => {
 const popRank = (m) => (m && POPULAR.some((k) => m.toLowerCase().includes(k)) ? 0 : 1);
 const isLive = (b) => !b.until || b.until >= TODAY; // skjul tidsbegrensede tilbud som er utløpt
 const nicheRank = (b) => (b && b.niche ? 1 : 0);    // hyperlokale/smale fordeler vektes nederst
+const cmp = (a, z) => nicheRank(a) - nicheRank(z) || popRank(a.merchant) - popRank(z.merchant) || scoreOf(z.note) - scoreOf(a.note);
+
+/* Aktør-nøkkel: samler kjente kjeder under sitt POPULAR-stikkord (så «Esso» og
+   «Esso Mastercard» teller som én), ellers fullt navn. Brukes til å plukke noen
+   gjenkjennelige partnere til ingressen (gir konkret, søkbar tekst). */
+const brandKey = (m) => { const s = (m || "").toLowerCase().trim(); return POPULAR.find((k) => s.includes(k)) || s; };
+const notableMerchants = (benefits, n) => {
+  const seen = new Set(); const out = [];
+  for (const b of [...benefits].sort(cmp)) {
+    const k = brandKey(b.merchant);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(b.merchant.replace(/\s*\(.*\)\s*$/, "").trim()); // dropp parentes-haler
+    if (out.length >= n) break;
+  }
+  return out;
+};
+const andList = (arr) => arr.length <= 1 ? (arr[0] || "") : `${arr.slice(0, -1).join(", ")} og ${arr[arr.length - 1]}`;
 const valueFor = (orgId, merchant) => {
   for (const r of (AUTO_VALUE[orgId] || [])) if (r.re.test((merchant || "").toLowerCase())) return r.value;
   return null;
@@ -57,7 +75,8 @@ function cardHtml(org, b) {
     ? `<span class="card-value">≈ ${value.toLocaleString("no-NO")} kr/år inkludert</span>` : "";
   const notUniqueHtml = b.notUnique
     ? `<span class="card-notunique">fås også andre steder</span>` : "";
-  return `<a class="card" href="${esc(url)}" target="_blank" rel="nofollow noopener">`
+  const search = esc([b.merchant, b.note, ...(b.kw || []), CAT_LABEL[b.cats[0]] || ""].join(" ").toLowerCase());
+  return `<a class="card" data-search="${search}" href="${esc(url)}" target="_blank" rel="nofollow noopener">`
     + `<span class="card-ic" aria-hidden="true" style="background:${tint(org.color, 0.15)};color:rgba(13,12,34,0.62)">${svgOf(iconOf(b), 20)}</span>`
     + `<div class="card-body">`
       + `<div class="card-top"><span class="card-merch">${esc(b.merchant)}</span><span class="card-cat">${esc(CAT_LABEL[b.cats[0]] || "Andre tilbud")}</span></div>`
@@ -82,20 +101,47 @@ function buildPage(org) {
       .sort((a, z) => nicheRank(a) - nicheRank(z) || popRank(a.merchant) - popRank(z.merchant) || scoreOf(z.note) - scoreOf(a.note)),
   })).filter((g) => g.rows.length);
 
-  const topCats = groups.slice(0, 3).map((g) => g.cat.label.toLowerCase()).join(", ");
-  const title = seo.title || `${org.short}-medlemsfordeler – rabatter og fordeler`;
-  const h1 = `${esc(org.name)}: medlemsfordeler og rabatter`;
+  // Kategorier sortert etter hvor mange tilbud de har (mest representative øverst i teksten)
+  const bySize = [...groups].sort((a, z) => z.rows.length - a.rows.length);
+  const topLabels = bySize.slice(0, 3).map((g) => g.cat.label.toLowerCase());
+  const topCats = andList(topLabels);
+  const partners = notableMerchants(liveBenefits, 5);
+  const incl = (AUTO_VALUE[org.id] || []).map((r) => r.label.toLowerCase());
+  const valueSentence = incl.length
+    ? `${incl[0].charAt(0).toUpperCase() + incl[0].slice(1)} har en reell årsverdi selv om du ikke bruker en eneste rabatt – resten er tilbud du kan bruke når du handler.`
+    : `De fleste fordelene er rabatter du kan bruke når du handler – ikke penger du får automatisk.`;
+
+  const title = seo.title || `${org.short} medlemsfordeler – ${count} rabatter samlet (2026)`;
+  const h1 = esc(seo.h1 || `${org.name} medlemsfordeler: ${count} rabatter og fordeler`);
   const description = seo.description
-    || `Oversikt over ${org.name}-fordelene: ${topCats} og mer. Se medlemsrabattene og fordelene du får, samlet på ett sted – og hva de er verdt.`;
+    || `Komplett oversikt over ${org.name}-fordelene (${count} stk): rabatter på ${topCats} og mer${partners.length ? `, bl.a. hos ${andList(partners.slice(0, 3))}` : ""}. Se hva medlemskapet er verdt i 2026.`;
   const intro = seo.intro
-    || `Her er oversikten over medlemsfordelene og rabattene du får gjennom ${org.name}${org.sub ? ` (${org.sub})` : ""}. Totalt ${count} fordeler, blant annet på ${topCats}. Vi anslår også hva som har en reell kroneverdi.`;
-  const related = seo.related
-    ? `<a class="related" href="${esc(seo.related.href)}">${esc(seo.related.label)} →</a>`
+    || `${org.name}${org.sub ? ` (${org.sub})` : ""} gir deg ${count} medlemsfordeler. Her er hele oversikten – samlet, sortert og søkbar – så du ser nøyaktig hvilke rabatter medlemskapet ditt gir, og hva de er verdt.`;
+  const body = seo.body
+    || `Du finner fordeler på blant annet ${esc(topCats)}${partners.length ? `, med kjente partnere som ${esc(andList(partners))}` : ""}. ${esc(valueSentence)} Skill mellom det som er <strong>gratis inkludert</strong> i medlemskapet og det som bare er <strong>rabattert medlemspris</strong> – og bruk søkefeltet under for å gå rett til en bestemt butikk eller kategori.`;
+
+  // Artikkelinnganger: kompakte kort (støtter flere artikler per medlemskap).
+  // seo.articles = [{ href, title, tag?, icon?, color? }]; eldre seo.related støttes også.
+  const articleDefs = seo.articles
+    || (seo.related ? [{ href: seo.related.href, title: seo.related.label.replace(/^Les også:\s*/i, ""), tag: "Guide", icon: "BookOpen" }] : []);
+  const articlesHtml = articleDefs.length
+    ? `<div class="art-list">${articleDefs.map((a) => {
+        const Icon = iconByName(a.icon) || iconByName("BookOpen");
+        const color = a.color || org.color || "#d76e98";
+        return `<a class="art" href="${esc(a.href)}">`
+          + `<span class="art-ic" aria-hidden="true" style="background:${tint(color, 0.15)};color:${esc(color)}">${svgOf(Icon, 22)}</span>`
+          + `<span class="art-tx"><span class="art-tag">${esc(a.tag || "Guide")}</span><span class="art-title">${esc(a.title)}</span></span>`
+          + `<span class="art-go">Les →</span>`
+        + `</a>`;
+      }).join("")}</div>`
     : "";
+
+  const searchHtml = `<div class="search-wrap"><input id="perks-search" type="search" autocomplete="off" placeholder="Søk i ${esc(org.short)}-fordelene – f.eks. hotell, drivstoff, forsikring…" aria-label="Søk i fordelene til ${esc(org.short)}" /></div>`
+    + `<p class="search-empty" id="perks-search-empty" hidden>Ingen treff. Prøv et annet søkeord.</p>`;
 
   const sections = groups.map((g) => {
     const ic = CAT_ICON[g.cat.id] ? `<span class="cat-ic" aria-hidden="true">${svgOf(CAT_ICON[g.cat.id], 18)}</span>` : "";
-    return `<h2>${ic}${esc(g.cat.label)}</h2><div class="grid">${g.rows.map((b) => cardHtml(org, b)).join("")}</div>`;
+    return `<section class="cat-sec"><h2>${ic}${esc(g.cat.label)} <span class="cat-count">${g.rows.length}</span></h2><div class="grid">${g.rows.map((b) => cardHtml(org, b)).join("")}</div></section>`;
   }).join("\n");
 
   const jsonld = {
@@ -145,14 +191,41 @@ function buildPage(org) {
       <p class="kicker"><a href="/">perks</a> <span>·</span> Medlemsfordeler</p>
       <h1>${h1}</h1>
       <p class="lead">${esc(intro)}</p>
-      <p class="meta">${count} fordeler · sist undersøkt juni 2026</p>
-      ${related}
+      <p class="intro-body">${body}</p>
+      <p class="meta">${count} fordeler · oppdatert juni 2026</p>
+      ${articlesHtml}
+      ${searchHtml}
       ${sections}
       <div data-perks-newsletter></div>
       <p class="foot"><a href="/">Se alle medlemskapene dine og regn ut verdien på forsiden →</a></p>
       <p class="fine">Rabattene er tilbud du kan bruke som medlem – ikke penger du får automatisk; kun goder med fast årsverdi (f.eks. innboforsikring) er tallfestet, og det er anslag. Rabatter og vilkår kan endres – sjekk alltid hos ${esc(org.short)} og tilbyderen. Lenker kan være annonselenker. perks er en uavhengig oversikt og er ikke tilknyttet ${esc(org.short)}.</p>
     </main>
     <div id="site-footer"></div>
+    <script>
+      /* Søk i denne foreningens fordeler – samme prinsipp som forsiden, men
+         avgrenset til kortene på denne siden. Ren DOM-filtrering, ingen avhengigheter. */
+      (function () {
+        var input = document.getElementById("perks-search");
+        if (!input) return;
+        var cards = [].slice.call(document.querySelectorAll(".card[data-search]"));
+        var secs = [].slice.call(document.querySelectorAll(".cat-sec"));
+        var empty = document.getElementById("perks-search-empty");
+        function apply() {
+          var q = input.value.trim().toLowerCase();
+          cards.forEach(function (c) {
+            c.style.display = (!q || c.getAttribute("data-search").indexOf(q) > -1) ? "" : "none";
+          });
+          var any = false;
+          secs.forEach(function (s) {
+            var vis = [].slice.call(s.querySelectorAll(".card[data-search]")).some(function (c) { return c.style.display !== "none"; });
+            s.style.display = vis ? "" : "none";
+            if (vis) any = true;
+          });
+          if (empty) empty.hidden = any || !q;
+        }
+        input.addEventListener("input", apply);
+      })();
+    </script>
     <script src="/header.js" defer></script>
     <script src="/footer.js" defer></script>
     <script src="/newsletter.js" defer></script>
