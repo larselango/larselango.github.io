@@ -9,19 +9,13 @@
    fra content.js; her styrer du bare tekst og URL.
 
    Hver nøkkel er org-id fra content.js (samme id som i CATALOG). ALT er
-   valgfritt – mangler et felt, lager generatoren en fornuftig, innholdsrik
-   standard ut fra navn, antall fordeler, kategorier og kjente partnere. Vil du
-   finpusse en side, fyll inn:
+   valgfritt – mangler et felt, lager generatoren en fornuftig standard ut
+   fra navn, antall fordeler og kategorier. Vil du finpusse en side, fyll inn:
      slug        – URL uten «.html» (f.eks. "lo-medlemsfordeler")
-     title       – <title> (hold ~50–60 tegn)
-     h1          – synlig overskrift (ellers avledet av navn + antall)
+     title       – <title> og H1-følge (hold ~50–60 tegn)
      description – meta description (~150–160 tegn)
-     intro       – ingress (vanlig tekst)
-     body        – brødtekst under ingressen (<strong> er ok)
-     articles    – [{ href, title, tag?, icon?, color? }] – kompakte artikkelkort
-                   (icon = navn fra src/icons.js, f.eks. "PiggyBank"). Flere kort
-                   er støttet, så seksjonen vokser etter hvert som artikler kommer.
-     related     – { href, label } – eldre enkeltlenke (støttes fortsatt)
+     intro       – ingress (vanlig tekst; <strong> er ok)
+     related     – { href, label } til en relevant guide/artikkel
    ===================================================================== */
 export const PAGE_SEO = {
   lo: {
@@ -31,9 +25,7 @@ export const PAGE_SEO = {
       "Komplett oversikt over LOfavør-fordelene: rabatter på reise, hotell, bank, forsikring, strøm og mer – og hva de faktisk er verdt for deg som LO-medlem.",
     intro:
       "LOfavør samler medlemsfordelene for LO-forbundene. Her er hele oversikten over rabatter og fordeler du får som LO-medlem – på reise, bank og forsikring, strøm, kultur og mer. Den eneste fordelen med en fast årsverdi er innboforsikringen; resten er tilbud du kan bruke.",
-    articles: [
-      { href: "/er-lofavor-verdt-det.html", title: "Er LO-medlemskap verdt det?", tag: "Guide", icon: "PiggyBank" },
-    ],
+    related: { href: "/er-lofavor-verdt-det.html", label: "Les også: Er LO-medlemskap verdt det?" },
   },
   obos: {
     slug: "obos-medlemsfordeler",
