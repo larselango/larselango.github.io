@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Fant ikke siden (404) – perks</title>
+    <meta name="description" content="Denne siden finnes ikke lenger, eller lenken var feil. Gå til forsiden og finn medlemsfordelene dine." />
+    <!-- Ikke indekser 404-siden, men la Google følge lenkene videre. -->
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#f4f4f6" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" />
+    <style>
+      :root { --ink:#0d0c22; --paper:#f4f4f6; --accent:#d76e98; --surface:#fff; }
+      * { box-sizing: border-box; }
+      html { background: var(--paper); }
+      body {
+        margin: 0; background: var(--paper); color: var(--ink);
+        font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+        line-height: 1.6; font-size: 16px;
+      }
+      .wrap {
+        max-width: 620px; margin: 0 auto;
+        min-height: 70vh; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; text-align: center;
+        padding: 48px 20px 40px;
+      }
+      .logo { font-family: "Schibsted Grotesk", system-ui, sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 22px; }
+      .logo span { color: var(--accent); }
+      .code { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .55; margin: 0 0 10px; }
+      h1 { font-family: "Schibsted Grotesk", system-ui, sans-serif; font-size: 27px; line-height: 1.18; letter-spacing: -0.4px; margin: 0 0 12px; }
+      p.lead { font-size: 17px; line-height: 1.55; opacity: .8; margin: 0 0 26px; max-width: 460px; }
+      .btn {
+        display: inline-block; background: var(--ink); color: #fff;
+        text-decoration: none; font-weight: 600; font-size: 15.5px;
+        padding: 12px 22px; border-radius: 999px;
+      }
+      .links { margin-top: 26px; font-size: 15px; opacity: .85; }
+      .links a { color: var(--accent); font-weight: 600; text-decoration: none; }
+      .links a:hover { text-decoration: underline; }
+      .dot { opacity: .4; margin: 0 8px; }
+    </style>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="wrap">
+      <div class="logo">perks<span>.</span></div>
+      <p class="code">404 · fant ikke siden</p>
+      <h1>Her var det tomt.</h1>
+      <p class="lead">
+        Siden finnes ikke, eller lenken var feil. Fordelene dine står trygt på plass –
+        du finner dem fra forsiden.
+      </p>
+      <a class="btn" href="/">Til forsiden →</a>
+      <div class="links">
+        Populære sider:
+        <a href="/lo-medlemsfordeler.html">LOfavør</a><span class="dot">·</span>
+        <a href="/obos-medlemsfordeler.html">OBOS</a><span class="dot">·</span>
+        <a href="/coop-medlemsfordeler.html">Coop</a><span class="dot">·</span>
+        <a href="/er-lofavor-verdt-det.html">Guide: Er LO verdt det?</a>
+      </div>
+    </main>
+    <div id="site-footer"></div>
+    <script src="/header.js" defer></script>
+    <script src="/footer.js" defer></script>
+  </body>
+</html>
